@@ -9,7 +9,7 @@ export default class DJSSharderPoster extends BasePoster implements BasePosterIn
   /**
    * Create a new poster
    * @param token Top.gg Bot Token
-   * @param client Your Discord.JS Client
+   * @param client Your Discord.JS ShardingManager
    * @param options Options
    */
   constructor (token: string, client: any, options?: PosterOptions) {
@@ -32,13 +32,19 @@ export default class DJSSharderPoster extends BasePoster implements BasePosterIn
   }
 
   public clientReady (): boolean {
-    return this.client.shards.every(x => x.ready)
+    return this.client.shards.size > 0 && this.client.shards.every(x => x.ready)
   }
 
   public waitForReady(fn: () => void) {
-    this.client.shards.last().on('ready', () => {
-      fn()
-    })
+    const listener = (shard) => {
+      if (shard.id !== this.client.totalShards - 1) return
+
+      this.client.off('shardCreate', listener)
+      shard.once('ready', () => {
+        fn()
+      })
+    }
+    this.client.on('shardCreate', listener)
   }
 
   public async getStats (): Promise<BotStats> {

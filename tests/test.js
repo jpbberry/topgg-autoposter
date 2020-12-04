@@ -70,14 +70,11 @@ const runs = {
   'discord.js.sharder': () => new Promise(resolve => {
     const sharder = new DiscordJS.ShardingManager('./tests/sharder.js', { token: discordToken, totalShards: shardCount, respawn: false })
 
-    const poster = new AutoPoster(topggToken, sharder, {
-      startPosting: false
-    })
+    const poster = new AutoPoster(topggToken, sharder)
 
     debug('Spawning shards, please wait...')
     sharder.spawn().then(() => {
       debug('Received READY from all shards')
-      poster.post()
     }).then(() => resolve())
 
     kill = () => {
