@@ -7,6 +7,11 @@ It's really really simple! All you gotta do is:
 const AutoPoster = require('topgg-autoposter')
 
 const ap = AutoPoster('topggtoken', client) // your discord.js or eris client
+
+// optional
+ap.on('posted', () => { // ran when succesfully posted
+  console.log('Posted stats to top.gg')
+})
 ```
 And that's it!
 
