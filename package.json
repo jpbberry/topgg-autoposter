@@ -23,6 +23,6 @@
     "eris": "latest"
   },
   "dependencies": {
-    "@top-gg/sdk": "git+https://github.com/jpbberry/dblapi.js.git"
+    "@top-gg/sdk": "latest"
   }
 }

@@ -29,39 +29,55 @@ const runs = {
       resolve()
     })
 
-    new AutoPoster(topggToken, client)
+    const poster = AutoPoster(topggToken, client)
 
     client.login(discordToken)
     kill = () => {
+      poster.stop()
       client.destroy()
     }
   }),
   'eris': () => new Promise(resolve => {
     const client = new Eris.Client(discordToken, { maxShards: shardCount })
 
+    const poster = AutoPoster(topggToken, client)
+
     client.on('ready', () => {
       debug('Received READY')
-
-      new AutoPoster(topggToken, client)
 
       resolve()
     })
 
     client.connect()
     kill = () => {
+      poster.stop()
       client.disconnect()
     }
   }),
-  'discord.js - traditional': () => new Promise(resolve => {
-    const sharder = new DiscordJS.ShardingManager('./tests/fork.js', { token: discordToken, totalShards: shardCount, respawn: false })
+  'discord.js.traditional': () => new Promise(resolve => {
+    const sharder = new DiscordJS.ShardingManager('./tests/traditional.js', { token: discordToken, totalShards: shardCount, respawn: false })
 
     debug('Spawning shards, please wait...')
     sharder.spawn().then(() => {
-      debug('Adding TopGG Client to all shards')
-      return sharder.broadcastEval(`
-        const AutoPoster = require('${path.resolve(__dirname, '..')}')
-        new AutoPoster('${topggToken}', this)
-      `)
+      debug('Received READY from all shards')
+      return true
+    }).then(() => resolve())
+
+    kill = () => {
+      sharder.shards.forEach(x => x.kill())
+    }
+  }),
+  'discord.js.sharder': () => new Promise(resolve => {
+    const sharder = new DiscordJS.ShardingManager('./tests/sharder.js', { token: discordToken, totalShards: shardCount, respawn: false })
+
+    const poster = new AutoPoster(topggToken, sharder, {
+      startPosting: false
+    })
+
+    debug('Spawning shards, please wait...')
+    sharder.spawn().then(() => {
+      debug('Received READY from all shards')
+      poster.post()
     }).then(() => resolve())
 
     kill = () => {
@@ -73,6 +89,13 @@ const runs = {
 const wait = (time) => new Promise(resolve => setTimeout(() => resolve(), time))
 
 async function run () {
+  if (process.argv[3]) {
+    currentRunning = process.argv[3]
+    await runs[currentRunning]()
+    await wait(5000)
+
+    return process.exit()
+  }
   for (const cur in runs) {
     currentRunning = cur
     debug('Loading')

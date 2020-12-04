@@ -3,22 +3,22 @@ import { BasePoster, BasePosterInterface } from './BasePoster'
 /**
  * Auto-Poster For Discord.JS
  */
-export default class ErisPoster extends BasePoster implements BasePosterInterface {
+export default class DJSSharderPoster extends BasePoster implements BasePosterInterface {
   private client: any
 
   /**
    * Create a new poster
    * @param token Top.gg Bot Token
-   * @param client Your Eris Client
+   * @param client Your Discord.JS Client
    * @param options Options
    */
   constructor (token: string, client: any, options?: PosterOptions) {
     if (!token) throw new Error('Missing Top.gg Token')
     if (!client) throw new Error('Missing client')
 
-    const Discord = require('eris')
+    const Discord = require('discord.js')
 
-    if (!(client instanceof Discord.Client)) throw new Error('Not an eris client.')
+    if (!(client instanceof Discord.ShardingManager)) throw new Error('Not a discord.js ShardingManager.')
 
     super(token, options)
 
@@ -32,19 +32,20 @@ export default class ErisPoster extends BasePoster implements BasePosterInterfac
   }
 
   public clientReady (): boolean {
-    return this.client.ready
+    return this.client.shards.every(x => x.ready)
   }
 
   public waitForReady(fn: () => void) {
-    this.client.once('ready', () => {
+    this.client.shards.last().on('ready', () => {
       fn()
     })
   }
 
   public async getStats (): Promise<BotStats> {
+    const response = await this.client.fetchClientValues('guilds.cache.size')
     return {
-      serverCount: this.client.guilds.size,
-      shardCount: this.client.options.maxShards
+      serverCount: response.reduce((a, b) => a + b, 0),
+      shardCount: response.length
     }
   }
 }
