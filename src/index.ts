@@ -4,6 +4,8 @@ import DJSPoster from './structs/DJSPoster'
 import ErisPoster from './structs/ErisPoster'
 
 function AutoPoster (token: string, client: any, options?: PosterOptions) {
+  if (!token) throw new Error('Token is missing')
+  if (!client) throw new Error('Client is missing')
   let DiscordJS
   try {
     DiscordJS = require.cache[require.resolve('discord.js')]

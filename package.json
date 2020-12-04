@@ -1,12 +1,12 @@
 {
   "name": "topgg-autoposter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Auto-Poster for Top.gg",
   "main": "index.js",
   "scripts": {
     "test": "node ./tests/test.js",
     "build": "tsc",
-    "prepare": "tsc"
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
