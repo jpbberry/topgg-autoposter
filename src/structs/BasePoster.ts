@@ -69,7 +69,11 @@ export class BasePoster extends EventEmitter {
   }
 
   private _setupInterval () {
-    if (this.options.postOnStart) this.post()
+    if (this.options.postOnStart) {
+      setTimeout(() => {
+        this.post()
+      }, 5000)
+    }
     this.interval = setInterval(() => {
       if (!this.binds.clientReady()) return
       this.post()
