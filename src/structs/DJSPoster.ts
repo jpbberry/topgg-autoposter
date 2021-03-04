@@ -1,5 +1,7 @@
 import { BasePoster, BasePosterInterface } from './BasePoster'
 
+import { BotStats } from '@top-gg/sdk/dist/typings'
+
 /**
  * Auto-Poster For Discord.JS
  */

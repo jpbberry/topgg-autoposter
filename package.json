@@ -1,6 +1,6 @@
 {
   "name": "topgg-autoposter",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "Auto-Poster for Top.gg",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,7 @@
     "eris": "latest"
   },
   "dependencies": {
-    "@top-gg/sdk": "latest"
+    "@top-gg/sdk": "^3.0.9"
   },
   "types": "./dist/index.d.ts"
 }

@@ -1,6 +1,8 @@
 import { EventEmitter } from 'events'
 import { Api } from '@top-gg/sdk'
 
+import { BotStats } from '@top-gg/sdk/dist/typings'
+
 export interface BasePosterInterface {
   getStats: () => Promise<BotStats>
   clientReady: () => boolean
