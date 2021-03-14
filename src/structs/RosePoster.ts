@@ -4,8 +4,6 @@ import { BotStats } from '@top-gg/sdk/dist/typings'
 
 import { Master } from 'discord-rose'
 
-import { State } from 'discord-rose/dist/clustering/ThreadComms'
-
 import { PosterOptions } from '../typings'
 
 /**
@@ -44,7 +42,7 @@ export default class RosePoster extends BasePoster implements BasePosterInterfac
 
     const stats = await this.client.getStats()
 
-    return stats.every(x => x.shards.every(x => x.state === State.CONNECTED))
+    return stats.every(x => x.shards.every(x => x.state === 2))
   }
 
   public waitForReady(fn: () => void) {
