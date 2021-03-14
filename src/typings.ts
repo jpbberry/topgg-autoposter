@@ -1,4 +1,6 @@
-interface PosterOptions {
+import { Api } from '@top-gg/sdk'
+
+export interface PosterOptions {
   /**
    * Interval at which to post
    * @default 1800000
@@ -13,4 +15,8 @@ interface PosterOptions {
    * Whether or not to begin posting right away. If off you need to run poster.start()
    */
   startPosting?: boolean
+  /**
+   * Alternate sdk especially for testing.
+   */
+  sdk?: Api
 }

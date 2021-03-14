@@ -5,47 +5,53 @@ const path = require('path')
 
 const AutoPoster = require('..')
 
+function debug (msg) {
+  console.debug(`[TEST] ${currentRunning}: ${msg}`)
+}
+
+const { Api } = require('@top-gg/sdk')
+const sdk = new Api(topggToken)
+
+sdk._request = (method, path, body) => {
+  debug(`${method} ${path}\n${JSON.stringify(body, null, 2)}`)
+}
+
 const DiscordJS = require('discord.js')
 const Eris = require('eris')
+const DR = require('discord-rose')
 
 const shardCount = Math.floor(Math.random() * 3) + 2
 
 let currentRunning = 'ESTABLISH'
 let kill
 
-function debug (msg) {
-  console.debug(`[TEST] ${currentRunning}: ${msg}`)
-}
+let poster
 
 debug(`Spawning ${shardCount} shards.`)
 
 const runs = {
-  'discord.js': () => new Promise(resolve => {
+  'discord.js': () => {
     const client = new DiscordJS.Client({ shardCount })
 
     client.on('ready', () => {
       debug('Received READY')
-
-      resolve()
     })
 
-    const poster = AutoPoster(topggToken, client)
+    poster = AutoPoster(topggToken, client, { sdk })
 
     client.login(discordToken)
     kill = () => {
       poster.stop()
       client.destroy()
     }
-  }),
-  'eris': () => new Promise(resolve => {
+  },
+  'eris': () => {
     const client = new Eris.Client(discordToken, { maxShards: shardCount })
 
-    const poster = AutoPoster(topggToken, client)
+    poster = AutoPoster(topggToken, client, { sdk })
 
     client.on('ready', () => {
       debug('Received READY')
-
-      resolve()
     })
 
     client.connect()
@@ -53,34 +59,51 @@ const runs = {
       poster.stop()
       client.disconnect()
     }
-  }),
-  'discord.js.traditional': () => new Promise(resolve => {
+  },
+  'discord.js.traditional': () => {
     const sharder = new DiscordJS.ShardingManager('./tests/traditional.js', { token: discordToken, totalShards: shardCount, respawn: false })
 
     debug('Spawning shards, please wait...')
     sharder.spawn().then(() => {
       debug('Received READY from all shards')
-      return true
-    }).then(() => resolve())
+      poster.emit('posted')
+    })
 
     kill = () => {
       sharder.shards.forEach(x => x.kill())
     }
-  }),
-  'discord.js.sharder': () => new Promise(resolve => {
+  },
+  'discord.js.sharder': () => {
     const sharder = new DiscordJS.ShardingManager('./tests/sharder.js', { token: discordToken, totalShards: shardCount, respawn: false })
 
-    const poster = new AutoPoster(topggToken, sharder)
+    poster = AutoPoster(topggToken, sharder, { sdk })
 
     debug('Spawning shards, please wait...')
     sharder.spawn().then(() => {
       debug('Received READY from all shards')
-    }).then(() => resolve())
+    })
 
     kill = () => {
       sharder.shards.forEach(x => x.kill())
     }
-  })
+  },
+  'discord-rose': () => {
+    const master = new DR.Master(path.resolve(__dirname, './drose-worker.js'), {
+      token: discordToken,
+      shards: shardCount,
+      log: null
+    })
+
+    poster = AutoPoster(topggToken, master, { sdk })
+
+    master.start().then(() => {
+      debug('Started')
+    })
+
+    kill = () => {
+      master.clusters.forEach(x => x.kill())
+    }
+  }
 }
 
 const wait = (time) => new Promise(resolve => setTimeout(() => resolve(), time))
@@ -88,16 +111,18 @@ const wait = (time) => new Promise(resolve => setTimeout(() => resolve(), time))
 async function run () {
   if (process.argv[3]) {
     currentRunning = process.argv[3]
-    await runs[currentRunning]()
-    await wait(5000)
-
-    return process.exit()
+    runs[currentRunning]()
+    poster.once('posted', () => {
+      return process.exit()
+    })
   }
   for (const cur in runs) {
     currentRunning = cur
     debug('Loading')
 
-    await runs[cur]()
+    runs[cur]()
+
+    await new Promise((r) => poster.on('posted', () => r()))
 
     debug('Cleaning up')
 

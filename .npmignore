@@ -5,6 +5,7 @@ logs/
 
 .eslintrc.json
 .gitattributes
+.vscode
 .gitignore
 .github/
 tests/

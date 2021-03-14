@@ -33,3 +33,12 @@ const poster = AutoPoster('topggtoken', sharder)
 sharder.spawn() // rest of your stuff!
 ```
 This will run broadcastEval's and automatically fetch your statistics!
+
+## [Discord-Rose](https://npmjs.com/discord-rose) posting
+
+```js
+const master = new Master(...)
+
+const poster = AutoPoster('topggtoken', master)
+```
+And it will run everything through comms.getStats() function

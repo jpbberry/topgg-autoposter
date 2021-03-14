@@ -2,11 +2,15 @@ import { BasePoster, BasePosterInterface } from './BasePoster'
 
 import { BotStats } from '@top-gg/sdk/dist/typings'
 
+import { ShardingManager } from 'discord.js'
+
+import { PosterOptions } from '../typings'
+
 /**
- * Auto-Poster For Discord.JS
+ * Auto-Poster For Discord.JS ShardingManager
  */
 export default class DJSSharderPoster extends BasePoster implements BasePosterInterface {
-  private client: any
+  private client: ShardingManager
 
   /**
    * Create a new poster
@@ -39,7 +43,7 @@ export default class DJSSharderPoster extends BasePoster implements BasePosterIn
 
   public waitForReady(fn: () => void) {
     const listener = (shard) => {
-      if (shard.id !== this.client.totalShards - 1) return
+      if (shard.id !== (this.client.totalShards as number) - 1) return
 
       this.client.off('shardCreate', listener)
       shard.once('ready', () => {

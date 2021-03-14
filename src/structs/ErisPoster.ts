@@ -2,11 +2,15 @@ import { BasePoster, BasePosterInterface } from './BasePoster'
 
 import { BotStats } from '@top-gg/sdk/dist/typings'
 
+import { Client } from 'eris'
+
+import { PosterOptions } from '../typings'
+
 /**
- * Auto-Poster For Discord.JS
+ * Auto-Poster For Eris
  */
 export default class ErisPoster extends BasePoster implements BasePosterInterface {
-  private client: any
+  private client: Client
 
   /**
    * Create a new poster
@@ -34,6 +38,7 @@ export default class ErisPoster extends BasePoster implements BasePosterInterfac
   }
 
   public clientReady (): boolean {
+    // @ts-expect-error eris internals
     return this.client.ready
   }
 
@@ -46,7 +51,7 @@ export default class ErisPoster extends BasePoster implements BasePosterInterfac
   public async getStats (): Promise<BotStats> {
     return {
       serverCount: this.client.guilds.size,
-      shardCount: this.client.options.maxShards
+      shardCount: this.client.options.maxShards as number
     }
   }
 }

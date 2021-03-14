@@ -2,11 +2,15 @@ import { BasePoster, BasePosterInterface } from './BasePoster'
 
 import { BotStats } from '@top-gg/sdk/dist/typings'
 
+import { PosterOptions } from '../typings'
+
+import { Client } from 'discord.js'
+
 /**
  * Auto-Poster For Discord.JS
  */
 export default class DJSPoster extends BasePoster implements BasePosterInterface {
-  private client: any
+  private client: Client
 
   /**
    * Create a new poster

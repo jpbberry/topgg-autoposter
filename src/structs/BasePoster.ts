@@ -3,9 +3,11 @@ import { Api } from '@top-gg/sdk'
 
 import { BotStats } from '@top-gg/sdk/dist/typings'
 
+import { PosterOptions } from '../typings'
+
 export interface BasePosterInterface {
   getStats: () => Promise<BotStats>
-  clientReady: () => boolean
+  clientReady: () => boolean | Promise<boolean>
   waitForReady: (fn: () => void) => void
 }
 
@@ -31,21 +33,22 @@ export class BasePoster extends EventEmitter {
     this.options = {
       interval: options.interval ?? 1800000,
       postOnStart: options.postOnStart ?? true,
-      startPosting: options.startPosting ?? true
+      startPosting: options.startPosting ?? true,
+      sdk: options.sdk
     }
 
     if (this.options.interval < 900000) {
       throw new Error('Posting interval must be above 900000 (15 minutes)')
     }
 
-    this.api = new Api(token)
+    this.api = this.options.sdk || new Api(token)
   }
 
-  public _binder (binds: BasePosterInterface) {
+  public async _binder (binds: BasePosterInterface) {
     this.binds = binds
 
     if (this.options.startPosting) {
-      if (this.binds.clientReady()) this.start()
+      if (await this.binds.clientReady()) this.start()
       else this.binds.waitForReady(() => {
         this.start()
       })
@@ -76,8 +79,8 @@ export class BasePoster extends EventEmitter {
         this.post()
       }, 5000)
     }
-    this.interval = setInterval(() => {
-      if (!this.binds.clientReady()) return
+    this.interval = setInterval(async () => {
+      if (!(await this.binds.clientReady())) return
       this.post()
     }, this.options.interval)
   }
