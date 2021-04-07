@@ -1,6 +1,6 @@
 {
   "name": "topgg-autoposter",
-  "version": "1.1.9",
+  "version": "1.1.10",
   "description": "Auto-Poster for Top.gg",
   "main": "index.js",
   "scripts": {

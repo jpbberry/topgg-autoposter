@@ -18,7 +18,7 @@ import { PosterOptions } from './typings'
  * AutoPoster('topggtoken', client) // that's it!
  */
 function AutoPoster (token: string, client: any, options?: PosterOptions): BasePoster {
-  if (!token) throw new Error('Token is missing')
+  if (!token) throw new Error('Top.gg token is missing')
   if (!client) throw new Error('Client is missing')
   let DiscordJS
   try {
