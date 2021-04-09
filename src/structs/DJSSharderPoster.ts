@@ -14,7 +14,7 @@ export default class DJSSharderPoster extends BasePoster implements BasePosterIn
 
   /**
    * Create a new poster
-   * @param token Top.gg Bot Token
+   * @param token Top.gg API Token
    * @param client Your Discord.JS ShardingManager
    * @param options Options
    */
