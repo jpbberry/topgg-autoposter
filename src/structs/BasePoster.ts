@@ -88,6 +88,6 @@ export class BasePoster extends EventEmitter {
   public async post () {
     this.api.postStats(await this.binds.getStats())
       .then((data) => this.emit('posted', data))
-      .catch((err) => this.emit("error", err))
+      .catch((err) => "error" in this._events ? this.emit("error", err) : console.error(err))
   }
 }
