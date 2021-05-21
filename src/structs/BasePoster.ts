@@ -13,6 +13,7 @@ export interface BasePosterInterface {
 
 export interface BasePoster {
   on(event: 'posted', listener: (stats) => void)
+  on(event: 'error', listener: (Error) => void)
 }
 
 export class BasePoster extends EventEmitter {
