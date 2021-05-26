@@ -9,7 +9,7 @@ import { PosterOptions } from '../typings'
 /**
  * Auto-Poster For Discord-Rose
  */
-export default class RosePoster extends BasePoster implements BasePosterInterface {
+export class RosePoster extends BasePoster implements BasePosterInterface {
   private client: Master
 
   /**

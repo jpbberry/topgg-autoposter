@@ -9,7 +9,7 @@ import { PosterOptions } from '../typings'
 /**
  * Auto-Poster For Discord.JS ShardingManager
  */
-export default class DJSSharderPoster extends BasePoster implements BasePosterInterface {
+export class DJSSharderPoster extends BasePoster implements BasePosterInterface {
   private client: ShardingManager
 
   /**

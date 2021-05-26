@@ -1,8 +1,8 @@
 {
   "name": "topgg-autoposter",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "Auto-Poster for Top.gg",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "node ./tests/test.js",
     "build": "tsc",
@@ -24,6 +24,7 @@
     "eris": "latest"
   },
   "dependencies": {
+    "@jpbberry/typed-emitter": "^1.0.1",
     "@top-gg/sdk": "^3.0.9",
     "typescript": "^4.2.3"
   },

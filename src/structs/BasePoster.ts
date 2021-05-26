@@ -1,5 +1,5 @@
-import { EventEmitter } from 'events'
 import { Api } from '@top-gg/sdk'
+import { EventEmitter } from '@jpbberry/typed-emitter'
 
 import { BotStats } from '@top-gg/sdk/dist/typings'
 
@@ -11,12 +11,10 @@ export interface BasePosterInterface {
   waitForReady: (fn: () => void) => void
 }
 
-export interface BasePoster {
-  on(event: 'posted', listener: (stats) => void)
-  on(event: 'error', listener: (Error) => void)
-}
-
-export class BasePoster extends EventEmitter {
+export class BasePoster extends EventEmitter<{
+  posted: BotStats,
+  error: Error
+}> {
   private options: PosterOptions
   private binds: BasePosterInterface
   private api: Api
@@ -89,6 +87,9 @@ export class BasePoster extends EventEmitter {
   public async post () {
     this.api.postStats(await this.binds.getStats())
       .then((data) => this.emit('posted', data))
-      .catch((err) => "error" in this._events ? this.emit("error", err) : console.error(err))
+      .catch((err) => this.eventNames().includes('error')
+        ? this.emit('error', err)
+        : console.error(err)
+      )
   }
 }

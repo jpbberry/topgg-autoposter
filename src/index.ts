@@ -1,7 +1,7 @@
-import DJSPoster from './structs/DJSPoster'
-import ErisPoster from './structs/ErisPoster'
-import DJSSharderPoster from './structs/DJSSharderPoster'
-import RosePoster from './structs/RosePoster'
+import { DJSPoster } from './structs/DJSPoster'
+import { ErisPoster } from './structs/ErisPoster'
+import { DJSSharderPoster } from './structs/DJSSharderPoster'
+import { RosePoster } from './structs/RosePoster'
 
 import { BasePoster } from './structs/BasePoster'
 
@@ -17,7 +17,7 @@ import { PosterOptions } from './typings'
  * 
  * AutoPoster('topggtoken', client) // that's it!
  */
-function AutoPoster (token: string, client: any, options?: PosterOptions): BasePoster {
+export function AutoPoster (token: string, client: any, options?: PosterOptions): BasePoster {
   if (!token) throw new Error('Top.gg token is missing')
   if (!client) throw new Error('Client is missing')
   let DiscordJS
@@ -43,9 +43,9 @@ function AutoPoster (token: string, client: any, options?: PosterOptions): BaseP
   throw new Error('Unsupported client')
 }
 
-AutoPoster.DJSPoster = DJSPoster
-AutoPoster.ErisPoster = ErisPoster
-AutoPoster.DJSSharderPost = DJSSharderPoster
-AutoPoster.RosePoster = RosePoster
+export { DJSPoster } from './structs/DJSPoster'
+export { ErisPoster } from './structs/ErisPoster'
+export { DJSSharderPoster } from './structs/DJSSharderPoster'
+export { RosePoster } from './structs/RosePoster'
 
 export default AutoPoster

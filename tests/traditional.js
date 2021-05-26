@@ -8,7 +8,7 @@ api._request = (method, path, body) => {
   console.log(method, path, body)
 }
 
-const AutoPoster = require('..')
+const { AutoPoster } = require('..')
 AutoPoster('abc', client, {
   sdk: api
 })

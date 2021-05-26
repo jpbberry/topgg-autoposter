@@ -9,7 +9,7 @@ import { Client } from 'discord.js'
 /**
  * Auto-Poster For Discord.JS
  */
-export default class DJSPoster extends BasePoster implements BasePosterInterface {
+export class DJSPoster extends BasePoster implements BasePosterInterface {
   private client: Client
 
   /**

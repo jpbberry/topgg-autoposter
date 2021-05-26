@@ -3,7 +3,7 @@ const topggToken = 'abc' // unnecessary to debug
 
 const path = require('path')
 
-const AutoPoster = require('..')
+const { AutoPoster } = require('..')
 
 function debug (msg) {
   console.debug(`[TEST] ${currentRunning}: ${msg}`)

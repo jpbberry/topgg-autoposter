@@ -9,7 +9,7 @@ import { PosterOptions } from '../typings'
 /**
  * Auto-Poster For Eris
  */
-export default class ErisPoster extends BasePoster implements BasePosterInterface {
+export class ErisPoster extends BasePoster implements BasePosterInterface {
   private client: Client
 
   /**
