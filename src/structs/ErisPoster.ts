@@ -38,7 +38,6 @@ export class ErisPoster extends BasePoster implements BasePosterInterface {
   }
 
   public clientReady (): boolean {
-    // @ts-expect-error eris internals
     return this.client.ready
   }
 

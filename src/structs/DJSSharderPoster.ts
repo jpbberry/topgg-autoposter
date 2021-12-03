@@ -54,7 +54,7 @@ export class DJSSharderPoster extends BasePoster implements BasePosterInterface 
   }
 
   public async getStats (): Promise<BotStats> {
-    const response = await this.client.fetchClientValues('guilds.cache.size')
+    const response = await this.client.fetchClientValues('guilds.cache.size') as number[]
     return {
       serverCount: response.reduce((a, b) => a + b, 0),
       shardCount: response.length
