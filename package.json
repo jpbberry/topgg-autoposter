@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/jpbberry/topgg-autoposter#readme",
   "devDependencies": {
+    "@types/express": "^4.17.17",
     "discord-rose": "latest",
     "discord.js": "latest",
     "eris": "latest",
