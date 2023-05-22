@@ -44,3 +44,23 @@ const master = new Master(...)
 const poster = AutoPoster('topggtoken', master)
 ```
 And it will run everything through comms.getStats() function
+
+## [Discord Hybrid Sharding](https://www.npmjs.com/package/discord-hybrid-sharding) Clusters
+If you're using Discord.JS alongside Discord Hybrid Sharding, overwrite the getStats function for auto poster.
+
+```js
+client.cluster = new ClusterClient(client);
+
+const poster = AutoPoster(topggAPI, client);
+
+poster.getStats = async () => {
+  const response = await client.cluster.fetchClientValues('guilds.cache.size');
+
+  return {
+    serverCount: response.reduce((a, b) => a + b, 0),
+    shardCount: client.cluster.info.TOTAL_SHARDS
+  }
+}
+
+poster.on("error", (err) => {});
+```
