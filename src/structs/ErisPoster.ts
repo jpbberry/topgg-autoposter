@@ -1,6 +1,6 @@
 import { BasePoster, BasePosterInterface } from './BasePoster'
 
-import { BotStats } from '@top-gg/sdk/dist/typings'
+import { BotStats } from '@top-gg/sdk'
 
 import { Client } from 'eris'
 

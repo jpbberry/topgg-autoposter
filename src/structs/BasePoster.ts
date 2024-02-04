@@ -1,7 +1,5 @@
-import { Api } from '@top-gg/sdk'
+import { Api, BotStats } from '@top-gg/sdk'
 import { EventEmitter } from '@jpbberry/typed-emitter'
-
-import { BotStats } from '@top-gg/sdk/dist/typings'
 
 import { PosterOptions } from '../typings'
 
