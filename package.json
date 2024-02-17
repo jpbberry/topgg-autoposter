@@ -23,12 +23,12 @@
     "discord-rose": "latest",
     "discord.js": "latest",
     "eris": "latest",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "oceanic.js": "latest"
   },
   "dependencies": {
     "@jpbberry/typed-emitter": "^1.2.1",
-    "@top-gg/sdk": "^3.1.6",
-    "oceanic.js": "^1.9.0"
+    "@top-gg/sdk": "^3.1.6"
   },
   "types": "./dist/index.d.ts"
 }
