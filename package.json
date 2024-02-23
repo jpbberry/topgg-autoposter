@@ -23,7 +23,8 @@
     "discord-rose": "latest",
     "discord.js": "latest",
     "eris": "latest",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "oceanic.js": "latest"
   },
   "dependencies": {
     "@jpbberry/typed-emitter": "^1.2.1",

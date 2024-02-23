@@ -103,6 +103,22 @@ const runs = {
     kill = () => {
       master.clusters.forEach(x => x.kill())
     }
+  },
+  'oceanic.js': () => {
+    const Oceanic = require('oceanic.js')
+    const client = new Oceanic.Client(discordToken, { shardCount })
+
+    poster = AutoPoster(topggToken, client, { sdk })
+
+    client.on('ready', () => {
+      debug('Received READY')
+    })
+
+    client.connect()
+    kill = () => {
+      poster.stop()
+      client.disconnect()
+    }
   }
 }
 
